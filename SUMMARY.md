@@ -2,7 +2,7 @@
 
 * [简介](README.md)
 
-* [中文文档](./chinese-document/readme.md)
+* [中文文档（翻译中）](./chinese-document/readme.md)
   * [介绍](./chinese-document/introduction/index.md)
   * [入门](./chinese-document/getting-started/index.md)
   * [文档](./chinese-document/documentation/index.md)
