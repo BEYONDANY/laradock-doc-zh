@@ -1,3 +1,4 @@
+
 ## 简介
 
 一套完整的基于Docker的PHP开发环境。
@@ -45,9 +46,6 @@ That's it! enjoy :)
 ```
 
 
-
-
-<a name="features"></a>
 ## 特点
 
 - 轻松切换PHP版本: 7.1, 7.0, 5.6...
@@ -66,10 +64,7 @@ That's it! enjoy :)
 - 每周会有更多更新。
 
 
-
-
-<a name="Supported-Containers"></a>
-## 支持的软件 (镜像)
+## 支持的软件
 
 在秉承Docker推动的关注分离原则的同时，Laradock在各自的容器中(Container)独立运行各自的软件，你可以像任何容器一样打开/关闭多个实例，而不用担心配置，一切都很有魅力。
 
@@ -103,9 +98,7 @@ PHP CLI - Composer - Git - Linuxbrew - Node - V8JS - Gulp - SQLite - xDebug - En
 > 如果你修改`docker-compose.yml`, `.env` 或者任何 `dockerfile` 文件, 你必须重新构建你的容器, 在运行实例中查看这些修改的效果。
 
 
-
 如果您在列表中找不到您的软件，请自行构建并提交。贡献欢迎:)
-
 
 
 
@@ -127,9 +120,7 @@ PHP CLI - Composer - Git - Linuxbrew - Node - V8JS - Gulp - SQLite - xDebug - En
 <a href="https://opencollective.com/laradock/sponsor/9/website" target="_blank"><img src="https://opencollective.com/laradock/sponsor/9/avatar.svg"></a>
 
 
-
-<a name="what-is-docker"></a>
-## 什么是Docker?
+## 什么是docker
 
 [Docker](https://www.docker.com) 是一个开发、运输、运行应用程序的开放平台。
 
@@ -139,8 +130,7 @@ Docker可以使你将应用程序和你的基础架构(设备)分离，因此你
 
 
 
-<a name="why-docker-not-vagrant"></a>
-## 为什么是 Docker 而不是 Vagrant!?
+## 为什么是docker而不是vagrant
 
 [Vagrant](https://www.vagrantup.com) 可以在进分钟内创建虚拟机， 而 Docker 是在几秒中内创建虚拟容器。
 
@@ -152,10 +142,6 @@ Docker提供**轻量级**的虚拟容器，它们共享相同的内核，并允�
 
 
 
-
-
-
-<a name="Demo"></a>
 ## 演示视频
 
 没有什么比演示视频更好啦：
@@ -167,12 +153,6 @@ Docker提供**轻量级**的虚拟容器，它们共享相同的内核，并允�
 - Laradock [v0.1](https://www.youtube.com/watch?v=3YQsHe6oF80)
 
 
-
-
-
-
-
-<a name="Chat"></a>
 ## 和我们交流
 
 欢迎您加入我们的Gitter聊天室。
@@ -181,9 +161,6 @@ Docker提供**轻量级**的虚拟容器，它们共享相同的内核，并允�
 
 
 
-
-
-<a name="Donations"></a>
 ## 捐赠
 
 > 通过 [捐助](http://laradock.io/contributing) 来帮助保持项目的发展。
