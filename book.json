@@ -1,0 +1,5 @@
+{
+  "gitbook": ">=2.0.0",
+  "description": "这是laradock文档的中文版",
+  "language": "zh"
+}
