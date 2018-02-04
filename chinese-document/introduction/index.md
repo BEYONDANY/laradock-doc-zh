@@ -1,3 +1,4 @@
+# 介绍
 
 ## 简介
 
@@ -120,7 +121,7 @@ PHP CLI - Composer - Git - Linuxbrew - Node - V8JS - Gulp - SQLite - xDebug - En
 <a href="https://opencollective.com/laradock/sponsor/9/website" target="_blank"><img src="https://opencollective.com/laradock/sponsor/9/avatar.svg"></a>
 
 
-## 什么是docker
+## 什么是Docker
 
 [Docker](https://www.docker.com) 是一个开发、运输、运行应用程序的开放平台。
 
@@ -130,7 +131,7 @@ Docker可以使你将应用程序和你的基础架构(设备)分离，因此你
 
 
 
-## 为什么是docker而不是vagrant
+## 为什么是Docker而不是Vagrant
 
 [Vagrant](https://www.vagrantup.com) 可以在进分钟内创建虚拟机， 而 Docker 是在几秒中内创建虚拟容器。
 
