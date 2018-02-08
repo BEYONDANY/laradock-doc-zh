@@ -18,7 +18,7 @@ npm install -g gitbook-cli
 - 克隆项目
 
 ```shell
-git clone git@github.com:linganmin/laradock-chinese-doc.git
+git clone git@github.com:linganmin/laradock-doc-zh.git
 ```
 
 - 进入项目并启动服务
