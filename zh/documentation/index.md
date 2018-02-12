@@ -6,7 +6,7 @@
 ```bash
 docker ps
 ```
-You can also use the following command if you want to see only this project containers:
+如果你只想看当前这个项目的容器，你也可以执行下面这个命令：
 
 ```bash
 docker-compose ps
@@ -18,7 +18,7 @@ docker-compose ps
 docker-compose stop
 ```
 
-To stop single container do:
+停止单个容器:
 
 ```bash
 docker-compose stop {container-name}
@@ -33,37 +33,37 @@ docker-compose down
 
 ## 通过命令进入容器
 
-1 - First list the current running containers with `docker ps`
+### 1.首先使用`docker ps`列出当前正在运行的容器：
 
-2 - Enter any container using:
+### 2.使用下面的命令进入任意容器：
 
 ```bash
 docker-compose exec {container-name} bash
 ```
 
-*Example: enter MySQL container*
+*例如: 进入MySQL容器*
 
 ```bash
 docker-compose exec mysql bash
 ```
 
-*Example: enter to MySQL prompt within MySQL container*
+*例如: 进入MySQL并在MySQL容器中使用命令提示符*
 
 ```bash
 docker-compose exec mysql mysql -u homestead -psecret
 ```
 
-3 - To exit a container, type `exit`.
+### 3.输入`exit`退出容器
 
 
 
 ## 编辑容器的默认配置
 
-Open the `docker-compose.yml` and change anything you want.
+打开`docker-compose.yml`修改任何你想修改的配置。
 
-Examples:
+栗子:
 
-Change MySQL Database Name:
+修改Mysql数据库名称:
 
 ```yml
     environment:
@@ -71,7 +71,7 @@ Change MySQL Database Name:
     ...
 ```
 
-Change Redis default port to 1111:
+把Redis默认端口改为1111:
 
 ```yml
     ports:
@@ -83,48 +83,52 @@ Change Redis default port to 1111:
 
 ## 编辑一个Docker镜像
 
-1 - Find the `Dockerfile` of the image you want to edit,
-<br>
-example for `mysql` it will be `mysql/Dockerfile`.
+### 1.找到你想编辑的镜像的`Dockerfile`文件
 
-2 - Edit the file the way you want.
+例如编辑`mysql`的`mysql/Dockerfile`文件。
 
-3 - Re-build the container:
+### 2.以你想要的方式编辑文件
+
+### 3.重新构建这个容器
 
 ```bash
 docker-compose build mysql
 ```
-More info on Containers rebuilding [here](#Build-Re-build-Containers).
+更多关于容器构建的信息请点击[这里](#构建或重构容器)。
 
 
 
 ## 构建或重构容器
 
-If you do any change to any `Dockerfile` make sure you run this command, for the changes to take effect:
+如果你对`Dockerfile`进行了任何修改，请确保你运行这个命令，这些修改才能生效。
 
 ```bash
 docker-compose build
 ```
-Optionally you can specify which container to rebuild (instead of rebuilding all the containers):
+
+或者，你可以指定要重建的容器（而不是重建所有容器）:
 
 ```bash
 docker-compose build {container-name}
 ```
 
-You might use the `--no-cache` option if you want full rebuilding (`docker-compose build --no-cache {container-name}`).
+如果你想全部重建，你可以使用`--no-cache`
 
+```
+docker-compose build --no-cache {container-name}
+```
 
 
 ## 添加更多软件的Docker镜像
 
-To add an image (software), just edit the `docker-compose.yml` and add your container details, to do so you need to be familiar with the [docker compose file syntax](https://docs.docker.com/compose/compose-file/).
-
+要添加一个镜像(软件), 只需要编辑`docker-compose.yml`并添加你的容器信息，要做到这一点你需要熟悉[docker compose文件的语法](https://docs.docker.com/compose/compose-file/).
 
 
 ## 查看日志文件
-The NGINX Log file is stored in the `logs/nginx` directory.
 
-However to view the logs of all the other containers (MySQL, PHP-FPM,...) you can run this:
+NGINX 日志文件存储在`logs/nginx`目录中
+
+但是要查看其他容器（Mysql，PHP-FPM,...）的日志，可以运行以下命令：
 
 ```bash
 docker-compose logs {container-name}
@@ -134,37 +138,36 @@ docker-compose logs {container-name}
 docker-compose logs -f {container-name}
 ```
 
-More [options](https://docs.docker.com/compose/reference/logs/)
+更多[选项](https://docs.docker.com/compose/reference/logs/)
 
 
 
 
 ## 安装PHP扩展
 
-Before installing PHP extensions, you have to decide whether you need for the `FPM` or `CLI` because each lives on a different container, if you need it for both you have to edit both containers.
+在安装PHP扩展之前，你必须决定你需要`FPM`还是`CLI`，因为每个都在不同的容器上，如果你两个都需要，你必须编辑这两个容器。
 
-The PHP-FPM extensions should be installed in `php-fpm/Dockerfile-XX`. *(replace XX with your default PHP version number)*.
-<br>
-The PHP-CLI extensions should be installed in `workspace/Dockerfile`.
+PHP-FPM扩展应该安装在`php-fpm/Dockerfile-XX`. *(用您的默认PHP版本号替换XX)*.
+
+PHP-CLI扩展应该安装在`workspace/Dockerfile`.
 
 
 
 
 ## 修改PHP-FPM版本
 
-By default **PHP-FPM 7.0** is running.
+默认运行的是**PHP-FPM 7.0**
 
->The PHP-FPM is responsible of serving your application code, you don't have to change the PHP-CLI version if you are planning to run your application on different PHP-FPM version.
+> PHP-FPM负责为您的应用程序代码提供服务,如果您计划在不同的PHP-FPM版本上运行您的应用程序，则不必更改PHP-CLI的版本。
 
 
-### A) Switch from PHP `7.0` to PHP `5.6`
+### A.从PHP `7.0`切换到PHP `5.6`
 
-1 - Open the `docker-compose.yml`.
+1. 打开`docker-compose.yml`
 
-2 - Search for `Dockerfile-70` in the PHP container section.
+2. 在PHP容器部分搜索`Dockerfile-70`
 
-3 - Change the version number, by replacing `Dockerfile-70` with `Dockerfile-56`, like this:
-
+3. 通过使用 `Dockerfile-56`替换`Dockerfile-70`来改变版本号, 就像这样:
 ```yml
     php-fpm:
         build:
@@ -172,45 +175,37 @@ By default **PHP-FPM 7.0** is running.
             dockerfile: Dockerfile-56
     ...
 ```
-
-4 - Finally rebuild the container
+4. 最后重新构建容器
 
 ```bash
 docker-compose build php-fpm
 ```
 
-> For more details about the PHP base image, visit the [official PHP docker images](https://hub.docker.com/_/php/).
+> 关于更多PHP基础镜像的信息，请访问[PHP官方Docker镜像](https://hub.docker.com/_/php/).
 
 
-### B) Switch from PHP `7.0` or `5.6` to PHP `5.5`
+### B.切换PHP `7.0` 或 `5.6` 为PHP `5.5`
 
-We do not natively support PHP 5.5 anymore, but you can get it in few steps:
-
-1 - Clone `https://github.com/laradock/php-fpm`.
-
-3 - Rename `Dockerfile-56` to `Dockerfile-55`.
-
-3 - Edit the file `FROM php:5.6-fpm` to `FROM php:5.5-fpm`.
-
-4 - Build an image from `Dockerfile-55`.
-
-5 - Open the `docker-compose.yml` file.
-
-6 - Point `php-fpm` to your `Dockerfile-55` file.
+我们不在原生支持PHP5.5，单您可以通过几个步骤获得它：
+1. 克隆 `https://github.com/laradock/php-fpm`
+2. 重命名 `Dockerfile-56` to `Dockerfile-55`
+3. 编辑`FROM php:5.6-fpm` to `FROM php:5.5-fpm`
+4. 构建一个`Dockerfile-55`的镜像
+5. 打开`docker-compose.yml`文件
+6. 将 `php-fpm`指向你的`Dockerfile-55`文件
 
 
 
 
 ## 修改PHP-CLI版本
 
-By default **PHP-CLI 7.0** is running.
+默认情况下使用的是**PHP-CLI 7.0**
 
->Note: it's not very essential to edit the PHP-CLI version. The PHP-CLI is only used for the Artisan Commands & Composer. It doesn't serve your Application code, this is the PHP-FPM job.
+> 注意: 编辑PHP-CLI版本并不是非常重要。PHP-CLI仅用于Artisan Commands＆Composer。它不提供应用程序代码，这是PHP-FPM的工作。
 
-The PHP-CLI is installed in the Workspace container. To change the PHP-CLI version you need to edit the `workspace/Dockerfile`.
+PHP-CLI安装在Workspace容器中,要更改PHP-CLI版本，您需要编辑`workspace/Dockerfile`
 
-Right now you have to manually edit the `Dockerfile` or create a new one like it's done for the PHP-FPM. (consider contributing).
-
+现在，您必须手动编辑`Dockerfile`或创建一个新的PHP-FPM
 
 
 ## 安装xDebug
