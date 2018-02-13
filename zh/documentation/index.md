@@ -210,20 +210,14 @@ PHP-CLI安装在Workspace容器中,要更改PHP-CLI版本，您需要编辑`work
 
 ## 安装xDebug
 
-1 - First install `xDebug` in the Workspace and the PHP-FPM Containers:
-<br>
-a) open the `docker-compose.yml` file
-<br>
-b) search for the `INSTALL_XDEBUG` argument under the Workspace Container
-<br>
-c) set it to `true`
-<br>
-d) search for the `INSTALL_XDEBUG` argument under the PHP-FPM Container
-<br>
-e) set it to `true`
+1. 首先在Workspace容器中和PHP-FPM容器中安装`xDebug`
+    - 打开`docker-compose.yml`文件
+    - 在Workspace容器中搜索`INSTALL_XDEBUG`参数
+    - 将它设置为true
+    - 在PHP-FPM容器中搜索`INSTALL_XDEBUG`参数
+    - 将它设置为true
 
-It should be like this:
-
+它将是这样的：
 ```yml
     workspace:
         build:
@@ -238,96 +232,86 @@ It should be like this:
                 - INSTALL_XDEBUG=true
     ...
 ```
+2. 打开`laradock/workspace/xdebug.ini`和`laradock/php-fpm/xdebug.ini`并至少启用以下配置：
 
-2 - Open `laradock/workspace/xdebug.ini` and `laradock/php-fpm/xdebug.ini` and enable at least the following configurations:
+    ```
+    xdebug.remote_autostart=1
+    xdebug.remote_enable=1
+    xdebug.remote_connect_back=1
+    ```
 
-```
-xdebug.remote_autostart=1
-xdebug.remote_enable=1
-xdebug.remote_connect_back=1
-```
+3. 重新构建容器`docker-compose build workspace php-fpm`
 
-3 - Re-build the containers `docker-compose build workspace php-fpm`
-
-For information on how to configure xDebug with your IDE and work it out, check this [Repository](https://github.com/LarryEitel/laravel-laradock-phpstorm) or follow up on the next section if you use linux and PhpStorm.
+有关如何使用IDE配置xDebug工作，请查看此[仓库](https://github.com/LarryEitel/laravel-laradock-phpstorm)，如果你在Linux下使用Phpstorm，请继续阅读下一节。
 
 
 
 ## 在Linux上为PhpStorm设置远程调试
 
- - Make sure you have followed the steps above in the [Install Xdebug section](http://laradock.io/documentation/#install-xdebug).
+> 确保你已经按照上面的步骤[安装XDebug](http://laradock.io/documentation/#install-xdebug).
 
- - Make sure Xdebug accepts connections and listens on port 9000. (Should be default configuration).
+> 确保Xdebug接收连接并监听端口9000(应该是默认配置)
+
 
 ![Debug Configuration](/images/photos/PHPStorm/linux/configuration/debugConfiguration.png "Debug Configuration").
 
- - Create a server with name `laradock` (matches **PHP_IDE_CONFIG** key in environment file) and make sure to map project root path with server correctly.
+> 创建一个名为`laradock`的服务器（与环境中的PHP_IDE_CONFIG键匹配），并确保将项目根路径与服务器正确映射。
 
 ![Server Configuration](/images/photos/PHPStorm/linux/configuration/serverConfiguration.png "Server Configuration").
 
- - Start listening for debug connections, place a breakpoint and you are good to go !
-
+> 开始监听调试连接，放置一个断点，干得漂亮！
 
 
 ## 开始或停止xDebug
 
-By installing xDebug, you are enabling it to run on startup by default.
+通过安装xDebug,你可以在默认情况下启用时运行。
 
-To control the behavior of xDebug (in the `php-fpm` Container), you can run the following commands from the Laradock root folder, (at the same prompt where you run docker-compose):
+要控制xDeubg（在php-fpm容器中）的行为，可以在laradock根文件夹运行以下命令（在运行docker-compose提示符的同一地方）
 
-- Stop xDebug from running by default: `.php-fpm/xdebug stop`.
-- Start xDebug by default: `.php-fpm/xdebug start`.
-- See the status: `.php-fpm/xdebug status`.
+- 从默认运行中停止xDebug：`.php-fpm/xdebug stop`
+- 打开xDebug：`.php-fpm/xdebug start`
+- 查看状态: `.php-fpm/xdebug status`.
 
-Note: If `.php-fpm/xdebug` doesn't execute and gives `Permission Denied` error the problem can be that file `xdebug` doesn't have execution access. This can be fixed by running `chmod` command  with desired access permissions.
-
+注意: 如果`.php-fpm/xdebug`不执行并给出`Permission Denied`错误，问题可能是`xdebug`文件没有执行权限，可以运行`chmod`命令来设置所需访问权限。
 
 
 ## 安装PHP部署工具Deployer
 
-1 - Open the `docker-compose.yml` file
-<br>
-2 - Search for the `INSTALL_DEPLOYER` argument under the Workspace Container
-<br>
-3 - Set it to `true`
-<br>
+1. 打开`docker-compose.yml`文件
+2. 在Workspace容器中搜索参数`INSTALL_DEPLOYER`
+3. 将其设置为true
+    应该是这样的:
+    ```yml
+        workspace:
+            build:
+                context: ./workspace
+                args:
+                    - INSTALL_DEPLOYER=true
+        ...
+    ```
+4.重新构建这个容器`docker-compose build workspace`
 
-It should be like this:
-
-```yml
-    workspace:
-        build:
-            context: ./workspace
-            args:
-                - INSTALL_DEPLOYER=true
-    ...
-```
-
-4 - Re-build the containers `docker-compose build workspace`
-
-[**Deployer Documentation Here**](https://deployer.org/docs)
+[**Deployer文档在这**](https://deployer.org/docs)
 
 
 
 ## 准备生产环境的Laradock
 
-It's recommended for production to create a custom `docker-compose.yml` file. For that reason, Laradock is shipped with `production-docker-compose.yml` which should contain only the containers you are planning to run on production (usage example: `docker-compose -f production-docker-compose.yml up -d nginx mysql redis ...`).
+建议为生产环境创建一个自定义的`docker-compose.yml`文件，因此Laradock附带的`production-docker-compose.yml`文件应当包含您计划在生产中运行的容器(使用示例： `docker-compose -f production-docker-compose.yml up -d nginx mysql redis ...`).
 
-Note: The Database (MySQL/MariaDB/...) ports should not be forwarded on production, because Docker will automatically publish the port on the host, which is quite insecure, unless specifically told not to. So make sure to remove these lines:
-
+注意: 数据库(MySQL/MariaDB/...) 端口不应该在生产环境中转发, 口不应该在生产中转发，因为Docker会自动发布主机上的端口，这是非常不安全的，除非特别告知不要。所以一定要删除这些行：
 ```
 ports:
     - "3306:3306"
 ```
 
-To learn more about how Docker publishes ports, please read [this excellent post on the subject](https://fralef.me/docker-and-iptables.html).
-
+要详细了解Docker如何发布端口，请阅读[关于此主题的优秀文章](https://fralef.me/docker-and-iptables.html).
 
 
 
 ## 在Digital-Ocean上安装Laravel和Docker
 
-### [Full Guide Here](https://github.com/laradock/laradock/blob/master/_guides/digital_ocean.md)
+[这是全部指南](https://github.com/laradock/laradock/blob/master/_guides/digital_ocean.md)
 
 
 
