@@ -602,198 +602,159 @@ ports:
 
 ## 使用RethinkDB
 
-The RethinkDB is an open-source Database for Real-time Web ([RethinkDB](https://rethinkdb.com/)).
-A package ([Laravel RethinkDB](https://github.com/duxet/laravel-rethinkdb)) is being developed and was released a version for Laravel 5.2 (experimental).
+RethinkDB是一个开源的实时Web数据库[RethinkDB](https://rethinkdb.com/)。
 
-1 - Run the RethinkDB Container (`rethinkdb`) with the `docker-compose up` command.
+[Laravel RethinkDB](https://github.com/duxet/laravel-rethinkdb)扩展包正在开发中，并且发布了Laravel5.2的released版本
 
-```bash
-docker-compose up -d rethinkdb
-```
+1. 使用`docker-compose up`命令运行RethinkDB容器
+    ```bash
+    docker-compose up -d rethinkdb
+    ```
+2. 通过RethinkDB管理控制台[http://localhost:8090/#tables](http://localhost:8090/#tables)来创建一个叫做`database`的数据库
+3. 将RethinkDB配置添加到`config/database.php`配置文件中
+    ```php
+    'connections' => [
 
-2 - Access the RethinkDB Administration Console [http://localhost:8090/#tables](http://localhost:8090/#tables) for create a database called `database`.
+        'rethinkdb' => [
+            'name'      => 'rethinkdb',
+            'driver'    => 'rethinkdb',
+            'host'      => env('DB_HOST', 'rethinkdb'),
+            'port'      => env('DB_PORT', 28015),
+            'database'  => env('DB_DATABASE', 'test'),
+        ]
 
-3 - Add the RethinkDB configurations to the `config/database.php` configuration file:
+        // ...
 
-```php
-'connections' => [
-
-	'rethinkdb' => [
-		'name'      => 'rethinkdb',
-		'driver'    => 'rethinkdb',
-		'host'      => env('DB_HOST', 'rethinkdb'),
-		'port'      => env('DB_PORT', 28015),
-		'database'  => env('DB_DATABASE', 'test'),
-	]
-
-	// ...
-
-],
-```
-
-4 - Open your Laravel's `.env` file and update the following variables:
-
-- set the `DB_CONNECTION` to your `rethinkdb`.
-- set the `DB_HOST` to `rethinkdb`.
-- set the `DB_PORT` to `28015`.
-- set the `DB_DATABASE` to `database`.
-
+    ],
+    ```
+4. 打开你的laravel的`.env`文件，并更新以下变量：
+    - 设置`DB_CONNECTION`为`rethinkdb`.
+    - 设置`DB_HOST`为`rethinkdb`.
+    - 设置`DB_PORT`为`28015`.
+    - 设置`DB_DATABASE`为`database`.
 
 
 ## 使用Minio
 
-1 - Configure Minio:
-  - On the workspace container, change `INSTALL_MC` to true to get the client
-  - Set `MINIO_ACCESS_KEY` and `MINIO_ACCESS_SECRET` if you wish to set proper keys
-
-2 - Run the Minio Container (`minio`) with the `docker-compose up` command. Example:
-
-```bash
-docker-compose up -d minio
-```
-
-3 - Open your browser and visit the localhost on port **9000** at the following URL:  `http://localhost:9000`
-
-4 - Create a bucket either through the webui or using the mc client:
-  ```bash
-  mc mb minio/bucket
-  ```
-
-5 - When configuring your other clients use the following details:
-  ```
-  S3_HOST=http://minio
-  S3_KEY=access
-  S3_SECRET=secretkey
-  S3_REGION=us-east-1
-  S3_BUCKET=bucket
-  ```
+1. 配置Minio
+    - 在Workspace容器中，修改`INSTALL_MC`为true以获取客户端。
+    - 如果您希望设置正确的密钥，设置`MINIO_ACCESS_KEY`和`MINIO_ACCESS_SECRET`
+2. 使用`docker-compose up`命令进入Minio容器，例子：
+    ```bash
+    docker-compose up -d minio
+    ```
+3. 打开浏览器并通过以下URL，访问**9000**端口上的localhost：`http://localhost:9000`
+4. 通过webui或使用mc客户端创建一个bucket
+    ```bash
+    mc mb minio/bucket
+    ```
+5. 在配置其他客户端时使用以下详细信息
+    ```
+    S3_HOST=http://minio
+    S3_KEY=access
+    S3_SECRET=secretkey
+    S3_REGION=us-east-1
+    S3_BUCKET=bucket
+    ```
 
 
 
 ## 使用AWS
 
-1 - Configure AWS:
-  - make sure to add your SSH keys in aws/ssh_keys folder
-
-2 - Run the Aws Container (`aws`) with the `docker-compose up` command. Example:
-
-```bash
-docker-compose up -d aws
-```
-
-3 - Access the aws container with `docker-compose exec aws bash`
-
-4 - To start using eb cli inside the container, initiaze your project first by doing 'eb init'. Read the [aws eb cli](http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/eb-cli3-configuration.html) docs for more details.
-
+1. 配置AWS：
+    -  确保将您的SSH密钥添加到`aws/ssh_keys`文件夹中
+2. 使用`docker-compose up`命令运行Aws容器，栗子：
+    ```bash
+    docker-compose up -d aws
+    ```
+3. 使用`docker-compose exec aws bash`命令访问aws容器
+4. 开始在容器内使用eb cli，首先通过执行`eb init`来启动你的项目。阅读[aws eb cli](http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/eb-cli3-configuration.html)文档了解更多详情。
 
 
 ## 使用Grafana
 
-1 - Configure Grafana: Change Port using `GRAFANA_PORT` if you wish to. Default is port 3000.
-
-2 - Run the Grafana Container (`grafana`) with the `docker-compose up`command:
-
-```bash
-docker-compose up -d grafana
-```
-
-3 - Open your browser and visit the localhost on port **3000** at the following URL: `http://localhost:3000`
-
-4 - Login using the credentials User = `admin` Passwort = `admin`. Change the password in the webinterface if you want to.
-
+1. 配置Grafana：如果你愿意，你可以使用`GRAFANA_PORT`更改端口，默认端口是3000
+2. 使用`docker-compose up`命令运行Grafana容器
+    ```bash
+    docker-compose up -d grafana
+    ```
+3. 打开浏览器并通过以下URL访问端口**3000**上的本地主机：`http://localhost:3000`
+4. 使用凭证登录User=`admin`,Passwort=`admin`。如果需要，请更改Web界面中的密码
 
 
 ## 安装CodeIgniter
 
-To install CodeIgniter 3 on Laradock all you have to do is the following simple steps:
-
-1 - Open the `docker-compose.yml` file.
-
-2 - Change `CODEIGNITER=false` to `CODEIGNITER=true`.
-
-3 - Re-build your PHP-FPM Container `docker-compose build php-fpm`.
+要在Laradock上安装CodeIgniter 3，您只需执行以下简单步骤：
+1. 打开`docker-compose.yml`文件
+2. 修改`CODEIGNITER=false`为`CODEIGNITER=true`
+3. 重新构建你的PHP-FPM容器`docker-compose build php-fpm`
 
 
 ## 安装Symfony
 
-1 - Open the `.env` file and set `WORKSPACE_INSTALL_SYMFONY` to `true`.
-
-2 - Run `docker-compose build workspace`, after the step above.
-
-3 - The NGINX sites include a default config file for your Symfony project `symfony.conf.example`, so edit it and make sure the `root` is pointing to your project `web` directory.
-
-4 - Run `docker-compose restart` if the container was already running, before the step above.
-
-5 - Visit `symfony.test`
-
+1. 打开`.env`文件，设置`WORKSPACE_INSTALL_SYMFONY`为`true`。
+2. 执行完上面的命令，运行`docker-compose build workspace`
+3. NGINX站点包含Symfony项目的默认配置文件`symfony.conf.example`，因此编辑它并确保root它指向您的项目web目录。
+4. 如果容器已经运行，在上述步骤执行之前先运行`docker-compose restart`
+5. 访问`symfony.test`
 
 
 ## 更改时区
 
-To change the timezone for the `workspace` container, modify the `TZ` build argument in the Docker Compose file to one in the [TZ database](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones).
-
-For example, if I want the timezone to be `New York`:
-
-```yml
-    workspace:
-        build:
-            context: ./workspace
-            args:
-                - TZ=America/New_York
-    ...
-```
-
-We also recommend [setting the timezone in Laravel](http://www.camroncade.com/managing-timezones-with-laravel/).
+要更改`workspace`容器中的时区，请将Docker compose文件中的`TZ`构建参数修改为[TZ 数据库](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)中的一个
+举个栗子, 如果你想设置时区为`New York`:
+    ```yml
+        workspace:
+            build:
+                context: ./workspace
+                args:
+                    - TZ=America/New_York
+        ...
+    ```
+我们还建议[在laravel项目中设置时区](http://www.camroncade.com/managing-timezones-with-laravel/).
 
 
 
 ## 添加定时任务
 
-You can add your cron jobs to `workspace/crontab/root` after the `php artisan` line.
+你可以在`workspace/crontab/root`中添加定时任务（cron jobs），放在`php artisan`这一行后面
+    ```
+    * * * * * php /var/www/artisan schedule:run >> /dev/null 2>&1
 
-```
-* * * * * php /var/www/artisan schedule:run >> /dev/null 2>&1
-
-# Custom cron
-* * * * * root echo "Every Minute" > /var/log/cron.log 2>&1
-```
-
-Make sure you [change the timezone](#Change-the-timezone) if you don't want to use the default (UTC).
-
+    # Custom cron
+    * * * * * root echo "Every Minute" > /var/log/cron.log 2>&1
+    ```
+如果你不想使用默认时区UTC，请[更改时区](#更改时区)
 
 
 ## 通过ssh访问工作区
 
-You can access the `workspace` container through `localhost:2222` by setting the `INSTALL_WORKSPACE_SSH` build argument to `true`.
-
-To change the default forwarded port for ssh:
-
-```yml
-    workspace:
-		ports:
-			- "2222:22" # Edit this line
-    ...
-```
-
+您可以在workspace通过`localhost:2222`设置`INSTALL_WORKSPACE_SSH`构建参数来访问容器`true`。
+要更改ssh的默认转发端口
+    ```yml
+        workspace:
+            ports:
+                - "2222:22" # Edit this line
+        ...
+    ```
 
 
 ## 更改MySQL版本
 
-By default **MySQL 8.0** is running.
+默认情况下运行的Mysql版本为8.0
 
-MySQL 8.0 is a development release.  You may prefer to use the latest stable version, or an even older release.  If you wish, you can change the MySQL image that is used.
+Mysql8.0是一个开发版本，您可能更愿意使用最新的稳定版本，或者更旧的版本。如果你愿意，你可以改变使用的MySQL镜像。
 
-Open up your .env file and set the `MYSQL_VERSION` variable to the version you would like to install.
-
-```
-MYSQL_VERSION=5.7
-```
-
-Available versions are: 5.5, 5.6, 5.7, 8.0, or latest.  See https://store.docker.com/images/mysql for more information.
+打开你的.env文件，设置`MYSQL_VERSION`变量为你想要安装的版本。
+    ```
+    MYSQL_VERSION=5.7
+    ```
+可用版本为：5.5,5.6,5.7,8.0或最新版本。有关更多信息，请参阅https://store.docker.com/images/mysql 
 
 
 
 ## 通过主机访问Mysql
+
 
 You can forward the MySQL/MariaDB port to your host by making sure these lines are added to the `mysql` or `mariadb` section of the `docker-compose.yml` or in your [environment specific Compose](https://docs.docker.com/compose/extends/) file.
 
