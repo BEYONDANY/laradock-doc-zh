@@ -755,8 +755,8 @@ Mysql8.0是一个开发版本，您可能更愿意使用最新的稳定版本，
 
 ## 通过主机访问Mysql
 
-
-You can forward the MySQL/MariaDB port to your host by making sure these lines are added to the `mysql` or `mariadb` section of the `docker-compose.yml` or in your [environment specific Compose](https://docs.docker.com/compose/extends/) file.
+你可以通过确保这些线被添加到转发的MySQL/MariaDB的端口
+你可以转发MySQL/MariaDB端口到你的宿主机上通过确保这些关系被添加到`docker-compose.yml`或[environment specific Compose](https://docs.docker.com/compose/extends/)文件的`mysql`或`mariadb`部分，或在你的
 
 ```
 ports:
@@ -764,20 +764,13 @@ ports:
 ```
 
 
-
 ## 使用root访问Mysql
 
-The default username and password for the root MySQL user are `root` and `root `.
-
-1 - Enter the MySQL container: `docker-compose exec mysql bash`.
-
-2 - Enter mysql: `mysql -uroot -proot` for non root access use `mysql -uhomestead -psecret`.
-
-3 - See all users: `SELECT User FROM mysql.user;`
-
-4 - Run any commands `show databases`, `show tables`, `select * from.....`.
-
-
+默认的mysql用户的用户名和密码是root和root
+1. 进入mysql容器`docker-compose exec mysql bash`
+2. 使用root进入mysql`mysql -uroot -proot`，使用费root用户进入mysql`mysql -uhomestead -psecret`
+3. 查看所有用户`SELECT User FROM mysql.user;`
+4. 运行一些命令`show databases`, `show tables`, `select * from.....`.
 
 
 ## 创建多个MySQL数据库
@@ -792,129 +785,95 @@ GRANT ALL ON `your_db_1`.* TO 'mysql_user'@'%' ;
 
 ## 更改MySQL端口
 
-Modify the `mysql/my.cnf` file to set your port number, `1234` is used as an example.
-
+修改`mysql/my.cnf` 文件并设置你的端口号, `1234` 作为示例
 ```
 [mysqld]
 port=1234
 ```
 
-If you need <a href="#MySQL-access-from-host">MySQL access from your host</a>, do not forget to change the internal port number (`"3306:3306"` -> `"3306:1234"`) in the docker-compose configuration file.
-
-
-
+如果你需要从主机访问mysql，请不要忘记更改docker-compose配置问价中的内部转发端口： (`"3306:3306"` -> `"3306:1234"`)
 
 
 ## 使用自定义域名代替Docker的ip
 
-Assuming your custom domain is `laravel.test`
+假设你的自定义域名是`laravel.test`
 
-1 - Open your `/etc/hosts` file and map your localhost address `127.0.0.1` to the `laravel.test` domain, by adding the following:
-
-```bash
-127.0.0.1    laravel.test
-```
-
-2 - Open your browser and visit `{http://laravel.test}`
-
-
-Optionally you can define the server name in the NGINX configuration file, like this:
-
-```conf
-server_name laravel.test;
-```
-
+1. 打开你的`/etc/hosts`文件，并将你的宿主机地址映射`127.0.0.1`到域名`laravel.test`，方法是添加一下内容：
+    ```bash
+    127.0.0.1    laravel.test
+    ```
+2. 打开你的浏览器并访问`{http://laravel.test}`
+或者，你可以在NGINX配置文件中定义服务器名称，如下所示：
+    ```conf
+    server_name laravel.test;
+    ```
 
 
 ## 启用全局composer构建安装
 
-Enabling Global Composer Install during the build for the container allows you to get your composer requirements installed and available in the container after the build is done.
+在构建容器的过程中启用全局 Composer Install可以让你在完成构建后安装和使用容器中的composer的需求。
 
-1 - Open the `docker-compose.yml` file
-
-2 - Search for the `COMPOSER_GLOBAL_INSTALL` argument under the Workspace Container and set it to `true`
-
-It should be like this:
-
-```yml
-    workspace:
-        build:
-            context: ./workspace
-            args:
-                - COMPOSER_GLOBAL_INSTALL=true
-    ...
-```
-3 - Now add your dependencies to `workspace/composer.json`
-
-4 - Re-build the Workspace Container `docker-compose build workspace`
-
+1. 打开`docker-compose.yml`文件
+2. 在Workspace容器中搜索`COMPOSER_GLOBAL_INSTALL`参数并设置为`true`
+    她应该是在这样的:
+    ```yml
+        workspace:
+            build:
+                context: ./workspace
+                args:
+                    - COMPOSER_GLOBAL_INSTALL=true
+        ...
+    ```
+3. 现在添加你的依赖关系到`workspace/composer.json`
+4. 重新构建Workspace容器`docker-compose build workspace`
 
 
 
 ## 安装Prestissimo
 
-[Prestissimo](https://github.com/hirak/prestissimo) is a plugin for composer which enables parallel install functionality.
+[Prestissimo](https://github.com/hirak/prestissimo)是composer的一个插件，它可以实现并行安装功能。
 
-1 - Enable Running Global Composer Install during the Build:
-
-Click on this [Enable Global Composer Build Install](#Enable-Global-Composer-Build-Install) and do steps 1 and 2 only then continue here.
-
-2 - Add prestissimo as requirement in Composer:
-
-a - Now open the `workspace/composer.json` file
-
-b - Add `"hirak/prestissimo": "^0.3"` as requirement
-
-c - Re-build the Workspace Container `docker-compose build workspace`
-
+1. 启用全局composer构建安装
+2. 在Composer中添加prestissimo作为需要
+    - 打开`workspace/composer.json`文件
+    - 添加`"hirak/prestissimo": "^0.3"`作为需要
+    - 重新构建Workspace容器`docker-compose build workspace`
 
 
 ## 安装Node和NVM
 
-To install NVM and NodeJS in the Workspace container
-
-1 - Open the `docker-compose.yml` file
-
-2 - Search for the `INSTALL_NODE` argument under the Workspace Container and set it to `true`
-
-It should be like this:
-
-```yml
-    workspace:
-        build:
-            context: ./workspace
-            args:
-                - INSTALL_NODE=true
-    ...
-```
-
-3 - Re-build the container `docker-compose build workspace`
-
+在Workspace容器中安装NVM和NodeJs
+1. 打开`docker-compose.yml`文件
+2. 在Workspace容器中搜索`INSTALL_NODE`参数并将其设置为`true`
+    - 它应该是这样的
+    ```yml
+        workspace:
+            build:
+                context: ./workspace
+                args:
+                    - INSTALL_NODE=true
+        ...
+    ```
+3. 重新构建容器`docker-compose build workspace`
 
 
 
 ## 安装Node和YARN
 
-Yarn is a new package manager for JavaScript. It is so faster than npm, which you can find [here](http://yarnpkg.com/en/compare).To install NodeJS and [Yarn](https://yarnpkg.com/) in the Workspace container:
-
-1 - Open the `docker-compose.yml` file
-
-2 - Search for the `INSTALL_NODE` and `INSTALL_YARN` argument under the Workspace Container and set it to `true`
-
-It should be like this:
-
-```yml
-    workspace:
-        build:
-            context: ./workspace
-            args:
-                - INSTALL_NODE=true
-                - INSTALL_YARN=true
-    ...
-```
-
-3 - Re-build the container `docker-compose build workspace`
-
+Yarn是新的JavaScript的包管理器，他比npm快，你可以在[here](http://yarnpkg.com/en/compare)找到他，来将NodeJS和Yarn安装在Workspace容器中：
+1. 打开`docker-compose.yml`文件
+2. 在Workspace容器中搜索`INSTALL_NODE` 和 `INSTALL_YARN`参数，并将其设置为`true`
+    它应该是这样的：
+    ```yml
+        workspace:
+            build:
+                context: ./workspace
+                args:
+                    - INSTALL_NODE=true
+                    - INSTALL_YARN=true
+        ...
+    ```
+3. 重新构建容器`docker-compose build workspace`
 
 
 
