@@ -317,393 +317,287 @@ ports:
 
 ## 使用Jenkins
 
-1) Boot the container `docker-compose up -d jenkins`. To enter the container type `docker-compose exec jenkins bash`.
+1. 启动容器`docker-compose up -d jenkins`，进入容器方式`docker-compose exec jenkins bash`
+2. 浏览器打开`http://localhost:8090/`（如果你没用修改默认端口映射）
+3. 从web应用程序进行身份验证
+    - 默认用户名是`admin`
+    - 默认密码是`docker-compose exec jenkins cat /var/jenkins_home/secrets/initialAdminPassword`
+    (以root方式进入容器`docker-compose exec --user root jenkins bash`)
+4. 安装一些插件
+5. 创建你的第一个admin用户或继续组委管理员
 
-2) Go to `http://localhost:8090/` (if you didn't chanhed your default port mapping) 
+注意: 要添加用户，请进入 `http://localhost:8090/securityRealm/addUser` 并访问`http://localhost:8090/restart`进行重启
 
-3) Authenticate from the web app.
-
-- Default username is `admin`.
-- Default password is `docker-compose exec jenkins cat /var/jenkins_home/secrets/initialAdminPassword`. 
-
-(To enter container as root type `docker-compose exec --user root jenkins bash`).
-
-4) Install some plugins.
-
-5) Create your first Admin user, or continue as Admin.
-
-Note: to add user go to `http://localhost:8090/securityRealm/addUser` and to restart it from the web app visit `http://localhost:8090/restart`.
-
-You may wanna change the default security configuration, so go to `http://localhost:8090/configureSecurity/` under Authorization and choosing "Anyone can do anything" or "Project-based Matrix Authorization Strategy" or anything else.
-
+你可能想更改默认安全配置，请进入`http://localhost:8090/configureSecurity/`在授权下选择“Anyone can do anything（任何人都可以执行任何操作）”或Project-based Matrix Authorization Strategy（基于项目的矩阵授权策略”或其他任何操作）。
 
 
 ## 在Docker容器中安装Laravel
 
-1 - First you need to enter the Workspace Container.
+1. 首先你需要进入Workspace容器
+2. 安装Laravel
+    > 使用composer的例子
 
-2 - Install Laravel.
-
-Example using Composer
-
-```bash
-composer create-project laravel/laravel my-cool-app "5.2.*"
-```
-
-> We recommend using `composer create-project` instead of the Laravel installer, to install Laravel.
-
-For more about the Laravel installation click [here](https://laravel.com/docs/master#installing-laravel).
-
-
-3 - Edit `docker-compose.yml` to Map the new application path:
-
-By default, Laradock assumes the Laravel application is living in the parent directory of the laradock folder.
-
-Since the new Laravel application is in the `my-cool-app` folder, we need to replace `../:/var/www` with `../my-cool-app/:/var/www`, as follow:
-
-```yaml
-    application:
-		 image: tianon/true
-        volumes:
-            - ../my-cool-app/:/var/www
-    ...
-```
-4 - Go to that folder and start working..
-
-```bash
-cd my-cool-app
-```
-
-5 - Go back to the Laradock installation steps to see how to edit the `.env` file.
-
+    ```bash
+    composer create-project laravel/laravel my-cool-app "5.2.*"
+    ```
+    > 我们推荐使用`composer create-project`代替Laravel安装器，来安装Laravel
+    有关Laravel安装的更多信息，请点击[此处](https://laravel.com/docs/master#installing-laravel)
+3. 编辑`docker-compose.yml`文件以映射新的应用程序路径
+    
+    默认情况下，Laradock假定Laravel应用程序位于laradock文件夹的父目录中。
+    由于新的Laravel应用位于`my-cool-app`文件夹中，因此我们需要使用`../my-cool-app/:/var/www`替换`../:/var/www`，如下所示：
+    ```yaml
+        application:
+            image: tianon/true
+            volumes:
+                - ../my-cool-app/:/var/www
+        ...
+    ```
+4. 进入该文件并开始工作
+    ```bash
+    cd my-cool-app
+    ```
+5. 返回到Laradock安装步骤，了解如何编辑`.env`文件
 
 
 ## 运行Artisan命令
 
-You can run artisan commands and many other Terminal commands from the Workspace container.
+你可以在workspace容器中运行artisan命令和许多其他终端命令。
 
-1 - Make sure you have the workspace container running.
-
-```bash
-docker-compose up -d workspace // ..and all your other containers
-```
-
-2 - Find the Workspace container name:
-
-```bash
-docker-compose ps
-```
-
-3 - Enter the Workspace container:
-
-```bash
-docker-compose exec workspace bash
-```
-
-Add `--user=laradock` (example `docker-compose exec --user=laradock workspace bash`) to have files created as your host's user.
-
-
-4 - Run anything you want :)
-
-```bash
-php artisan
-```
-```bash
-Composer update
-```
-```bash
-phpunit
-```
-
-
+1. 确保你的workspace容器是出在运行中的。
+    ```bash
+    docker-compose up -d workspace // ..and all your other containers
+    ```
+2. 找到workspace容器名称：
+    ```bash
+    docker-compose ps
+    ```
+3. 进入workspace容器
+    ```bash
+    docker-compose exec workspace bash
+    ```
+    添加`--user=laradock`（例如`docker-compose exec --user=laradock workspace bash`）以创建你的主用户
+4. 运行任何你想要的:)
+    ```bash
+    php artisan
+    ```
+    ```bash
+    Composer update
+    ```
+    ```bash
+    phpunit
+    ```
 
 ## 运行Laravel队列工作者
 
-1 - First add `php-worker` container. It will be similar as like PHP-FPM Container.
-<br>
-a) open the `docker-compose.yml` file
-<br>
-b) add a new service container by simply copy-paste this section below PHP-FPM container
-
-```yaml
-    php-worker:
-      build:
-        context: ./php-worker
-        dockerfile: "Dockerfile-${PHP_VERSION}" #Dockerfile-71 or #Dockerfile-70 available
-        args:
-          - INSTALL_PGSQL=${PHP_WORKER_INSTALL_PGSQL} #Optionally install PGSQL PHP drivers
-      volumes_from:
-        - applications
-      depends_on:
-        - workspace
-      extra_hosts:
-        - "dockerhost:${DOCKER_HOST_IP}"
-      networks:
-        - backend
-```
-2 - Start everything up
-
-```bash
-docker-compose up -d php-worker
-```
-
-
+1. 首先添加`php-worker`容器，这和PHP-FPM容器类似。
+    - 打开`docker-compose.yml`文件
+    - 只需在PHP-FPM容器下复制粘贴本节即可添加一个新的服务容器
+    ```yaml
+        php-worker:
+        build:
+            context: ./php-worker
+            dockerfile: "Dockerfile-${PHP_VERSION}" #Dockerfile-71 or #Dockerfile-70 available
+            args:
+            - INSTALL_PGSQL=${PHP_WORKER_INSTALL_PGSQL} #Optionally install PGSQL PHP drivers
+        volumes_from:
+            - applications
+        depends_on:
+            - workspace
+        extra_hosts:
+            - "dockerhost:${DOCKER_HOST_IP}"
+        networks:
+            - backend
+    ```
+2. 开始一切
+    ```bash
+    docker-compose up -d php-worker
+    ```
 
 ## 使用Redis
 
-1 - First make sure you run the Redis Container (`redis`) with the `docker-compose up` command.
-
-```bash
-docker-compose up -d redis
-```
-
-> To execute redis commands, enter the redis container first `docker-compose exec redis bash` then enter the `redis-cli`.
-
-2 - Open your Laravel's `.env` file and set the `REDIS_HOST` to `redis`
-
-```env
-REDIS_HOST=redis
-```
-
-If you're using Laravel, and you don't find the `REDIS_HOST` variable in your `.env` file. Go to the database configuration file `config/database.php` and replace the default `127.0.0.1` IP with `redis` for Redis like this:
-
-```php
-'redis' => [
-    'cluster' => false,
-    'default' => [
-        'host'     => 'redis',
-        'port'     => 6379,
-        'database' => 0,
+1. 首先确保你的`redis`容器使用`docker-compose up`启动
+    ```bash
+    docker-compose up -d redis
+    ```
+    > 要执行redis命令，首先进入redis容器`docker-compose exec redis bash`，然后进入`redis-cli`
+2. 打开你的Laravel的`.env`文件并设置`REDIS_HOST` 为 `redis
+    ```env
+    REDIS_HOST=redis
+    ```
+    如果你正在使用Laravel，并且你么有在你的`.env`文件中找到`REDIS_HOST`变量，转到数据库配置文件`config/database.php`并用`redis`替换默认`127.0.0.1`，Redis如下所示:
+    ```php
+    'redis' => [
+        'cluster' => false,
+        'default' => [
+            'host'     => 'redis',
+            'port'     => 6379,
+            'database' => 0,
+        ],
     ],
-],
-```
-
-3 - To enable Redis Caching and/or for Sessions Management. Also from the `.env` file set `CACHE_DRIVER` and `SESSION_DRIVER` to `redis` instead of the default `file`.
-
-```env
-CACHE_DRIVER=redis
-SESSION_DRIVER=redis
-```
-
-4 - Finally make sure you have the `predis/predis` package `(~1.0)` installed via Composer:
-
-```bash
-composer require predis/predis:^1.0
-```
-
-5 - You can manually test it from Laravel with this code:
-
-```php
-\Cache::store('redis')->put('Laradock', 'Awesome', 10);
-```
-
-
+    ```
+3. 启用Redis缓存或用于会话管理。还要从`.env`文件中设置`CACHE_DRIVER`和`ESSION_DRIVER`为redis，来替换默认的`file`。
+    ```env
+    CACHE_DRIVER=redis
+    SESSION_DRIVER=redis
+    ```
+4. 最终确保你通过composer安装了`predis/predis`包 `(~1.0)`
+    ```bash
+    composer require predis/predis:^1.0
+    ```
+5. 您可以使用以下代码从Laravel手动测试它
+    ```php
+    \Cache::store('redis')->put('Laradock', 'Awesome', 10);
+    ```
 
 ## 使用Mongo
 
-1 - First install `mongo` in the Workspace and the PHP-FPM Containers:
-<br>
-a) open the `docker-compose.yml` file
-<br>
-b) search for the `INSTALL_MONGO` argument under the Workspace Container
-<br>
-c) set it to `true`
-<br>
-d) search for the `INSTALL_MONGO` argument under the PHP-FPM Container
-<br>
-e) set it to `true`
+1. 首先在Workspace和PHP-FPM容器中安装`mongo`
+    - 打开`docker-compose.yml`文件
+    - 在Workspace容器中搜索参数`INSTALL_MONGO`
+    - 将它设置为`true`
+    - 在PHP-FPM容器中搜索参数`INSTALL_MONGO`
+    - 将它设置为`true`
+    应该是这样的：
+    ```yml
+        workspace:
+            build:
+                context: ./workspace
+                args:
+                    - INSTALL_MONGO=true
+        ...
+        php-fpm:
+            build:
+                context: ./php-fpm
+                args:
+                    - INSTALL_MONGO=true
+        ...
+    ```
+2. 重新构建容器`docker-compose build workspace php-fpm`
+3. 使用`docker-compose up`命令运行 MongoDB容器
+    ```bash
+    docker-compose up -d mongo
+    ```
+4. 将MongoDB配置添加到`config/database.php`配置文件中
+    ```php
+    'connections' => [
 
-It should be like this:
+        'mongodb' => [
+            'driver'   => 'mongodb',
+            'host'     => env('DB_HOST', 'localhost'),
+            'port'     => env('DB_PORT', 27017),
+            'database' => env('DB_DATABASE', 'database'),
+            'username' => '',
+            'password' => '',
+            'options'  => [
+                'database' => '',
+            ]
+        ],
 
-```yml
-    workspace:
-        build:
-            context: ./workspace
-            args:
-                - INSTALL_MONGO=true
-    ...
-    php-fpm:
-        build:
-            context: ./php-fpm
-            args:
-                - INSTALL_MONGO=true
-    ...
-```
+        // ...
 
-2 - Re-build the containers `docker-compose build workspace php-fpm`
-
-
-
-3 - Run the MongoDB Container (`mongo`) with the `docker-compose up` command.
-
-```bash
-docker-compose up -d mongo
-```
-
-
-4 - Add the MongoDB configurations to the `config/database.php` configuration file:
-
-```php
-'connections' => [
-
-    'mongodb' => [
-        'driver'   => 'mongodb',
-        'host'     => env('DB_HOST', 'localhost'),
-        'port'     => env('DB_PORT', 27017),
-        'database' => env('DB_DATABASE', 'database'),
-        'username' => '',
-        'password' => '',
-        'options'  => [
-            'database' => '',
-        ]
     ],
+    ```
+5. 打开你的Laravel`.env`文件并更新以下变量
+    - 设置`DB_HOST`为你的`mongo`.
+    - 设置`DB_PORT`为`27017`.
+    - 设置`DB_DATABASE`为`database`.
+6. 最后确保你已经通过Composer安装了`jenssegers/mongodb`软件包，并且添加了它的服务提供者
 
-	// ...
-
-],
-```
-
-5 - Open your Laravel's `.env` file and update the following variables:
-
-- set the `DB_HOST` to your `mongo`.
-- set the `DB_PORT` to `27017`.
-- set the `DB_DATABASE` to `database`.
-
-
-6 - Finally make sure you have the `jenssegers/mongodb` package installed via Composer and its Service Provider is added.
-
-```bash
-composer require jenssegers/mongodb
-```
-More details about this [here](https://github.com/jenssegers/laravel-mongodb#installation).
-
-7 - Test it:
-
-- First let your Models extend from the Mongo Eloquent Model. Check the [documentation](https://github.com/jenssegers/laravel-mongodb#eloquent).
-- Enter the Workspace Container.
-- Migrate the Database `php artisan migrate`.
-
+    ```bash
+    composer require jenssegers/mongodb
+    ```
+    更多细节请点击[这里](https://github.com/jenssegers/laravel-mongodb#installation).
+7. 测试
+ - 先让你的Model继承自Mongo Eloquent模型，点击[文档](https://github.com/jenssegers/laravel-mongodb#eloquent)
+ - 进入Workspace容器
+ - 迁移数据库`php artisan migrate`
 
 
 ## 使用PhpMyAdmin
 
-1 - Run the phpMyAdmin Container (`phpmyadmin`) with the `docker-compose up` command. Example:
+1. 使用`docker-compose up`命令运行phpMyAdmin容器
+    ```bash
+    # use with mysql
+    docker-compose up -d mysql phpmyadmin
 
-```bash
-# use with mysql
-docker-compose up -d mysql phpmyadmin
-
-# use with mariadb
-docker-compose up -d mariadb phpmyadmin
-```
-
-*Note: To use with MariaDB, open `.env` and set `PMA_DB_ENGINE=mysql` to `PMA_DB_ENGINE=mariadb`.*
-
-2 - Open your browser and visit the localhost on port **8080**:  `http://localhost:8080`
-
+    # use with mariadb
+    docker-compose up -d mariadb phpmyadmin
+    ```
+    *注意: 要使用MariaDB, 打开 `.env`并设置`PMA_DB_ENGINE=mysql`为 `PMA_DB_ENGINE=mariadb`*
+2. 打开浏览器并通过端口**8080**访问本地主机：`http://localhost:8080`
 
 
 ## 使用Adminer
 
-1 - Run the Adminer Container (`adminer`) with the `docker-compose up` command. Example:
-
-```bash
-docker-compose up -d adminer
-```
-
-2 - Open your browser and visit the localhost on port **8080**:  `http://localhost:8080`
-
-**Note:** We've locked Adminer to version 4.3.0 as at the time of writing [it contained a major bug](https://sourceforge.net/p/adminer/bugs-and-features/548/) preventing PostgreSQL users from logging in. If that bug is fixed (or if you're not using PostgreSQL) feel free to set Adminer to the latest version within [the Dockerfile](https://github.com/laradock/laradock/blob/master/adminer/Dockerfile#L1): `FROM adminer:latest`
-
+1. 使用`docker-compose up`命令运行Adminer容器，例子：
+    ```bash
+    docker-compose up -d adminer
+    ```
+2. 打开浏览器并通过端口**8080**访问本地主机：`http://localhost:8080`
+    **注意:** 在撰写本文时，我们已将Adminer锁定为4.3.0版本，其中包含阻止PostgreSQL的[主要错误](https://sourceforge.net/p/adminer/bugs-and-features/548/)如果该错误得到解决（或者您未使用PostgreSQL），请随时设置Adminer到[the Dockerfile](https://github.com/laradock/laradock/blob/master/adminer/Dockerfile#L1)中的最新版本
 
 
 ## 使用PgAdmin
 
-1 - Run the pgAdmin Container (`pgadmin`) with the `docker-compose up` command. Example:
-
-```bash
-docker-compose up -d postgres pgadmin
-```
-
-2 - Open your browser and visit the localhost on port **5050**:  `http://localhost:5050`
-
+1. 使用`docker-compose up`命令运行pgAdmin容器，例子：
+    ```bash
+    docker-compose up -d postgres pgadmin
+    ```
+2. 打开你的浏览器并通过端口**5050**访问本地主机：`http://localhost:5050`
 
 
 ## 使用Beanstalkd
 
-1 - Run the Beanstalkd Container:
-
-```bash
-docker-compose up -d beanstalkd
-```
-
-2 - Configure Laravel to connect to that container by editing the `config/queue.php` config file.
-
-a. first set `beanstalkd` as default queue driver
-b. set the queue host to beanstalkd : `QUEUE_HOST=beanstalkd`
-
-*beanstalkd is now available on default port `11300`.*
-
-3 - Require the dependency package [pda/pheanstalk](https://github.com/pda/pheanstalk) using composer.
-
-
-Optionally you can use the Beanstalkd Console Container to manage your Queues from a web interface.
-
-1 - Run the Beanstalkd Console Container:
-
-```bash
-docker-compose up -d beanstalkd-console
-```
-
-2 - Open your browser and visit `http://localhost:2080/`
-
-3 - Add the server
-
-- Host: beanstalkd
-- Port: 11300
-
-4 - Done.
-
+1. 运行Beanstalkd容器
+    ```bash
+    docker-compose up -d beanstalkd
+    ```
+2. 通过编辑`config/queue.php`配置文件来配置Laravel以连接到该容器
+    - 首先设置`beanstalkd`为默认队列驱动
+    - 设置队列主机为beanstalkd：`QUEUE_HOST=beanstalkd`
+    *beanstalkd现在可用于默认端口`11300`*
+3. 需要使用composer的依赖包[pda/pheanstalk](https://github.com/pda/pheanstalk)
+    或者，您可以使用Beanstalkd控制台容器从Web界面管理您的队列
+    - 运行Beanstalkd控制台容器
+    ```bash
+    docker-compose up -d beanstalkd-console
+    ```
+    - 打开你的浏览器，访问`http://localhost:2080/`
+    - 添加服务器
+    ```
+    Host: beanstalkd
+    Port: 11300
+    ```
+4. 完成
 
 
 ## 使用ElasticSearch
 
-1 - Run the ElasticSearch Container (`elasticsearch`) with the `docker-compose up` command:
+1. 使用`docker-compose up`命令运行ElasticSearch容器
+    ```bash
+    docker-compose up -d elasticsearch
+    ```
+2. 打开浏览器并通过端口**9200**访问本地主机：`http://localhost:9200`
+> 默认用户是`user` 默认密码是`changeme`
 
-```bash
-docker-compose up -d elasticsearch
-```
-
-2 - Open your browser and visit the localhost on port **9200**:  `http://localhost:9200`
-
-> The default username is `user` and the default password is `changeme`.
-
-### Install ElasticSearch Plugin
-
-1 - Install an ElasticSearch plugin.
-
-```bash
-docker-compose exec elasticsearch /usr/share/elasticsearch/bin/plugin install {plugin-name}
-```
-
-2 - Restart elasticsearch container
-
-```bash
-docker-compose restart elasticsearch
-```
-
-
+### 安装 ElasticSearch 插件
+    - 安装一个ElasticSearch插件
+    ```bash
+    docker-compose exec elasticsearch /usr/share/elasticsearch/bin/plugin install {plugin-name}
+    ```
+    - 重启elasticsearch容器
+    ```bash
+    docker-compose restart elasticsearch
+    ```
 
 ## 使用Selenium
 
-1 - Run the Selenium Container (`selenium`) with the `docker-compose up` command. Example:
-
-```bash
-docker-compose up -d selenium
-```
-
-2 - Open your browser and visit the localhost on port **4444** at the following URL:  `http://localhost:4444/wd/hub`
-
+- 使用`docker-compose up`命令运行Selenium容器
+    ```bash
+    docker-compose up -d selenium
+    ```
+- 打开浏览器并通过以下URL 访问端口**4444**上的本地主机：`http://localhost:4444/wd/hub`
 
 
 ## 使用RethinkDB
