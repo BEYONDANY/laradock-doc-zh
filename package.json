@@ -1,5 +1,10 @@
 {
   "dependencies": {
-    "gitbook-plugin-devops": "^1.0.3"
+    "devops": "^0.0.0",
+    "donate": "^0.0.0",
+    "gitbook-plugin-devops": "^1.0.3",
+    "github": "^13.1.0",
+    "prism": "^4.1.2",
+    "splitter": "^0.1.2"
   }
 }

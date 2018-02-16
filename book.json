@@ -1,7 +1,7 @@
 {
   "gitbook": ">=2.0.0",
   "description": "这是laradock文档的中文版",
-  "language": "zh",
+  "language": "zh-hans",
   "plugins": ["devops", "donate", "sitemap-general", "splitter", "-lunr", "-search", "search-plus", "prism",
     "-highlight", "advanced-emoji", "github", "-sharing", "sharing-plus", "tbfed-pagefooter", "expandable-chapters-small"
   ],
