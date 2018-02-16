@@ -3,9 +3,12 @@
   "description": "这是laradock文档的中文版",
   "language": "zh-hans",
   "plugins": ["devops", "donate", "sitemap-general", "splitter", "-lunr", "-search", "search-plus",
-    "-highlight", "advanced-emoji", "github", "-sharing", "sharing-plus", "tbfed-pagefooter", "expandable-chapters-small"
+    "-highlight", "advanced-emoji", "github", "-sharing", "sharing-plus", "tbfed-pagefooter", "expandable-chapters-small", "disqus"
   ],
   "pluginsConfig": {
+    "disqus": {
+      "shortName": "laradock"
+    },
     "devops": {
       "bd_token": "13790b152f9b7e11d55fcc90843ada23",
       "google_analytics": "UA-98376646-2"
