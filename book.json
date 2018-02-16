@@ -2,7 +2,7 @@
   "gitbook": ">=2.0.0",
   "description": "这是laradock文档的中文版",
   "language": "zh-hans",
-  "plugins": ["devops", "donate", "sitemap-general", "splitter", "-lunr", "-search", "search-plus", "prism",
+  "plugins": ["devops", "donate", "sitemap-general", "splitter", "-lunr", "-search", "search-plus",
     "-highlight", "advanced-emoji", "github", "-sharing", "sharing-plus", "tbfed-pagefooter", "expandable-chapters-small"
   ],
   "pluginsConfig": {
@@ -18,11 +18,6 @@
     },
     "sitemap-general": {
       "prefix": "https://laradock.linganmin.cn"
-    },
-    "prism": {
-      "css": [
-        "prism-themes/themes/prism-base16-ateliersulphurpool.light.css"
-      ]
     },
     "github": {
       "url": "https://github.com/linganmin"
