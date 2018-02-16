@@ -3,8 +3,10 @@
   "description": "这是laradock文档的中文版",
   "language": "zh",
   "plugins": ["devops"],
-  "devops": {
-    "bd_token": "13790b152f9b7e11d55fcc90843ada23",
-    "google_analytics": "UA-98376646-2"
+  "pluginsConfig": {
+    "devops": {
+      "bd_token": "13790b152f9b7e11d55fcc90843ada23",
+      "google_analytics": "UA-98376646-2"
+    }
   }
 }
