@@ -1,5 +1,5 @@
 {
   "dependencies": {
-    "gitbook-plugin-baiduana": "^1.0.0"
+    "gitbook-plugin-devops": "^1.0.3"
   }
 }
