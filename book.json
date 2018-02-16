@@ -2,11 +2,59 @@
   "gitbook": ">=2.0.0",
   "description": "这是laradock文档的中文版",
   "language": "zh",
-  "plugins": ["devops"],
+  "plugins": ["devops", "donate", "sitemap-general", "splitter", "-lunr", "-search", "search-plus", "prism",
+    "-highlight", "advanced-emoji", "github", "-sharing", "sharing-plus", "tbfed-pagefooter", "expandable-chapters-small"
+  ],
   "pluginsConfig": {
     "devops": {
       "bd_token": "13790b152f9b7e11d55fcc90843ada23",
       "google_analytics": "UA-98376646-2"
+    },
+    "donate": {
+      "alipay": "https://ws1.sinaimg.cn/large/6aedb651gy1fl4unz9c3sj20u00tidkf.jpg",
+      "title": "",
+      "button": "赏",
+      "alipayText": "支付宝打赏"
+    },
+    "sitemap-general": {
+      "prefix": "https://laradock.linganmin.cn"
+    },
+    "prism": {
+      "css": [
+        "prism-themes/themes/prism-base16-ateliersulphurpool.light.css"
+      ]
+    },
+    "github": {
+      "url": "https://github.com/linganmin"
+    },
+    "sharing": {
+      "douban": false,
+      "facebook": false,
+      "google": true,
+      "hatenaBookmark": false,
+      "instapaper": false,
+      "line": true,
+      "linkedin": true,
+      "messenger": false,
+      "pocket": false,
+      "qq": false,
+      "qzone": true,
+      "stumbleupon": false,
+      "twitter": false,
+      "viber": false,
+      "vk": false,
+      "weibo": true,
+      "whatsapp": false,
+      "all": [
+        "facebook", "google", "twitter",
+        "weibo", "instapaper", "linkedin",
+        "pocket", "stumbleupon"
+      ]
+    },
+    "tbfed-pagefooter": {
+      "copyright": "Copyright &copy <a href='https://www.linganmin.cn'>小下</a> 2018",
+      "modify_label": "该文件修订时间：",
+      "modify_format": "YYYY-MM-DD HH:mm:ss"
     }
   }
 }
