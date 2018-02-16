@@ -879,341 +879,164 @@ Yarn是新的JavaScript的包管理器，他比npm快，你可以在[here](http:
 
 ## 安装Linuxbrew
 
-Linuxbrew is a package manager for Linux. It is the Linux version of MacOS Homebrew and can be found [here](http://linuxbrew.sh). To install Linuxbrew in the Workspace container:
+Linuxbrew是Linux的包管理器，它是MacOSS的Homebrew的Linux版本，可以在[这里](http://linuxbrew.sh)找到它。将Linuxbrew安装在Workspace中：
 
-1 - Open the `docker-compose.yml` file
-
-2 - Search for the `INSTALL_LINUXBREW` argument under the Workspace Container and set it to `true`
-
-It should be like this:
-
-```yml
-    workspace:
-        build:
-            context: ./workspace
-            args:
-                - INSTALL_LINUXBREW=true
-    ...
-```
-
-3 - Re-build the container `docker-compose build workspace`
-
+1. 打开`docker-compose.yml`文件
+2. 在Workspace容器中查找`INSTALL_LINUXBREW`参数，并将其设置为`true`
+    它应该还是这样的
+    ```yml
+        workspace:
+            build:
+                context: ./workspace
+                args:
+                    - INSTALL_LINUXBREW=true
+        ...
+    ```
+3. 重新构建容器`docker-compose build workspace`
 
 
 ## 常见的Terminal别名
+当你启动Docker容器时，Laradock将会赋值位于`laradock/workspace`目录中的`aliases.sh`文件，并将源文件添加到容器的`~/.bashrc`文件中。
 
-When you start your docker container, Laradock will copy the `aliases.sh` file located in the `laradock/workspace` directory and add sourcing to the container `~/.bashrc` file.
-
-You are free to modify the `aliases.sh` as you see fit, adding your own aliases (or function macros) to suit your requirements.
-
+你可以任意修改`aliases.sh`为你认为合适的，可以个努努你自己的需要添加你自己的别名（或宏函数），
 
 
 ## 安装Aerospike扩展
 
-1 - First install `aerospike` in the Workspace and the PHP-FPM Containers:
-<br>
-a) open the `docker-compose.yml` file
-<br>
-b) search for the `INSTALL_AEROSPIKE` argument under the Workspace Container
-<br>
-c) set it to `true`
-<br>
-d) search for the `INSTALL_AEROSPIKE` argument under the PHP-FPM Container
-<br>
-e) set it to `true`
-
-It should be like this:
-
-```yml
-    workspace:
-        build:
-            context: ./workspace
-            args:
-                - INSTALL_AEROSPIKE=true
-    ...
-    php-fpm:
-        build:
-            context: ./php-fpm
-            args:
-                - INSTALL_AEROSPIKE=true
-    ...
-```
-
-2 - Re-build the containers `docker-compose build workspace php-fpm`
-
-
+1. 首先在Workspace和PHP-FPM容器中安装`aerospike`
+    - 打开`docker-compose.yml`文件
+    - 在Workspace容器中查找`INSTALL_AEROSPIKE`参数
+    - 将它设置为`true`
+    它应该是这样的:
+    ```yml
+        workspace:
+            build:
+                context: ./workspace
+                args:
+                    - INSTALL_AEROSPIKE=true
+        ...
+        php-fpm:
+            build:
+                context: ./php-fpm
+                args:
+                    - INSTALL_AEROSPIKE=true
+        ...
+    ```
+2. 重新构建容器`docker-compose build workspace php-fpm`
 
 
 ## 安装Laravel-Envoy
 
-1 - Open the `docker-compose.yml` file
-<br>
-2 - Search for the `INSTALL_LARAVEL_ENVOY` argument under the Workspace Container
-<br>
-3 - Set it to `true`
-<br>
+1. 打开`docker-compose.yml`文件
+2. 在Workspace容器中搜索`INSTALL_LARAVEL_ENVOY`参数
+3. 将它设置为true
+    它应该是这样的：
+    ```yml
+        workspace:
+            build:
+                context: ./workspace
+                args:
+                    - INSTALL_LARAVEL_ENVOY=true
+        ...
+    ```
+4. 重新构建容器`docker-compose build workspace`
 
-It should be like this:
-
-```yml
-    workspace:
-        build:
-            context: ./workspace
-            args:
-                - INSTALL_LARAVEL_ENVOY=true
-    ...
-```
-
-4 - Re-build the containers `docker-compose build workspace`
-
-[**Laravel Envoy Documentation Here**](https://laravel.com/docs/5.3/envoy)
-
-
+[**Laravel Envoy 文档在这**](https://laravel.com/docs/5.3/envoy)
 
 
 
 ## PHPStorm调试指南
 
-Remote debug Laravel web and phpunit tests.
+远程调试Laravel web和phpunit测试
 
-[**Debugging Guide Here**](https://github.com/laradock/laradock/blob/master/_guides/phpstorm.md)
-
+[**Debugging 指南在这**](https://github.com/laradock/laradock/blob/master/_guides/phpstorm.md)
 
 
 
 ## 跟踪你的laradock变化
 
 1. Fork the Laradock repository.
-2. Use that fork as a submodule.
-3. Commit all your changes to your fork.
-4. Pull new stuff from the main repository from time to time.
-
+2. 将该fork作为子模块
+3. 将所有更改提交给你的fork分支
+4. 时常从主repository中拉取新的更新
 
 
 ## 升级Laradock
 
 Moving from Docker Toolbox (VirtualBox) to Docker Native (for Mac/Windows). Requires upgrading Laradock from v3.* to v4.*:
 
-1. Stop the docker VM `docker-machine stop {default}`
-2. Install Docker for [Mac](https://docs.docker.com/docker-for-mac/) or [Windows](https://docs.docker.com/docker-for-windows/).
-3. Upgrade Laradock to `v4.*.*` (`git pull origin master`)
-4. Use Laradock as you used to do: `docker-compose up -d nginx mysql`.
+1. 停止所有Docker虚拟机`docker-machine stop {default}`
+2. 安装 Docker [Mac](https://docs.docker.com/docker-for-mac/) or [Windows](https://docs.docker.com/docker-for-windows/).
+3. 将Laradock更新到`v4.*.*` (`git pull origin master`)
+4. 根据你的需要使用Laradock: `docker-compose up -d nginx mysql`.
 
-**Note:** If you face any problem with the last step above: rebuild all your containers
+**Note:** 如果你在执行上面的最后一步时遇到任何问题: 重新构建你的容器！
 `docker-compose build --no-cache`
-"Warning Containers Data might be lost!"
+"警告：容器数据可能会丢失！"
 
 
 
 ## 在MacOS上提高速度
 
-Docker on the Mac [is slow](https://github.com/docker/for-mac/issues/77), at the time of writing. Especially for larger projects, this can be a problem. The problem is [older than March 2016](https://forums.docker.com/t/file-access-in-mounted-volumes-extremely-slow-cpu-bound/8076) - as it's a such a long-running issue, we're including it in the docs here.
+> 译者注：关于如何在MacOS上提高执行速度的详细指南请参考[官方英文文档](http://laradock.io/documentation/#improve-speed-on-macos),该部分文档未做翻译。
 
-So since sharing code into Docker containers with osxfs have very poor performance compared to Linux. Likely there are some workarounds:
+在撰写本文档时，Docker在Mac上[执行速度很慢](https://github.com/docker/for-mac/issues/77),特别是对于大项目这个可能是一个问题，这个问题早于[2016年3月](https://forums.docker.com/t/file-access-in-mounted-volumes-extremely-slow-cpu-bound/8076)。
+因为这是一个长期存在的问题，我们将其纳入文档。
 
+因此，与Linux相比，由于osxfs将代码共享到Docker容器的性能非常差，可能有一些解决方法：
 
-
-### Workaround A: using dinghy
-
-[Dinghy](https://github.com/codekitchen/dinghy) creates its own VM using docker-machine, it will not modify your existing docker-machine VMs.
-
-Quick Setup giude, (we recommend you check their docs)
-
-1) `brew tap codekitchen/dinghy`
-
-2) `brew install dinghy`
-
-3) `dinghy create --provider virtualbox` (must have virtualbox installed, but they support other providers if you prefer)
-
-4) after the above command is done it will display some env variables, copy them to the bash profile or zsh or.. (this will instruct docker to use the server running inside the VM)
-
-5) `docker-compose up ...`
-
-
-
-<br>
-<a name="Docker-Sync"></a>
-### Workaround B: using d4m-nfs
-
-You can use the d4m-nfs solution in 2 ways, one is using the Laradock built it integration, and the other is using the tool separatly. Below is show case of both methods:
-
-
-#### B.1: using the built in d4m-nfs integration
-
-In simple terms, docker-sync creates a docker container with a copy of all the application files that can be accessed very quickly from the other containers.
-On the other hand, docker-sync runs a process on the host machine that continuously tracks and updates files changes from the host to this intermediate container.
-
-Out of the box, it comes pre-configured for OS X, but using it on Windows is very easy to set-up by modifying the `DOCKER_SYNC_STRATEGY` on the `.env`
-
-##### Usage
-
-Laradock comes with `sync.sh`, an optional bash script, that automates installing, running and stopping docker-sync.  Note that to run the bash script you may need to change the permissions `chmod 755 sync.sh`
-
-1) Configure your Laradock environment as you would normally do and test your application to make sure that your sites are running correctly.
-
-2) Make sure to set `DOCKER_SYNC_STRATEGY` on the `.env`. Read the [syncing strategies](https://github.com/EugenMayer/docker-sync/wiki/8.-Strategies) for details.
-```
-# osx: 'native_osx' (default)
-# windows: 'unison'
-# linux: docker-sync not required
-
-DOCKER_SYNC_STRATEGY=native_osx
-```
-
-2) Install the docker-sync gem on the host-machine:
-```bash
-./sync.sh install
-```
-3) Start docker-sync and the Laradock environment.
-Specify the services you want to run, as you would normally do with `docker-compose up`
-```bash
-./sync.sh up nginx mysql
-```
-Please note that the first time docker-sync runs, it will copy all the files to the intermediate container and that may take a very long time (15min+).
-4) To stop the environment and docker-sync do:
-```bash
-./sync.sh down
-```
-
-##### Setting up Aliases (optional)
-
-You may create bash profile aliases to avoid having to remember and type these commands for everyday development.
-Add the following lines to your `~/.bash_profile`:
-
-```bash
-alias devup="cd /PATH_TO_LARADOCK/laradock; ./sync.sh up nginx mysql" #add your services
-alias devbash="cd /PATH_TO_LARADOCK/laradock; ./sync.sh bash"
-alias devdown="cd /PATH_TO_LARADOCK/laradock; ./sync.sh down"
-```
-
-Now from any location on your machine, you can simply run `devup`, `devbash` and `devdown`.
-
-
-##### Additional Commands
-
-Opening bash on the workspace container (to run artisan for example):
- ```bash
- ./sync.sh bash
- ```
-Manually triggering the synchronization of the files:
-```bash
-./sync.sh sync
-```
-Removing and cleaning up the files and the docker-sync container. Use only if you want to rebuild or remove docker-sync completely. The files on the host will be kept untouched.
-```bash
-./sync.sh clean
-```
-
-
-##### Additional Notes
-
-- You may run laradock with or without docker-sync at any time using with the same `.env` and `docker-compose.yml`, because the configuration is overridden automatically when docker-sync is used.
-- You may inspect the `sync.sh` script to learn each of the commands and even add custom ones.
-- If a container cannot access the files on docker-sync, you may need to set a user on the Dockerfile of that container with an id of 1000 (this is the UID that nginx and php-fpm have configured on laradock). Alternatively, you may change the permissions to 777, but this is **not** recommended.
-
-Visit the [docker-sync documentation](https://github.com/EugenMayer/docker-sync/wiki) for more details.
-
-
-
-
-
-
-
-
-<br>
-
-#### B.2: using the d4m-nfs tool
-
-[D4m-nfs](https://github.com/IFSight/d4m-nfs) automatically mount NFS volume instead of osxfs one.
-
-1) Update the Docker [File Sharing] preferences:
-
-Click on the Docker Icon > Preferences > (remove everything form the list except `/tmp`).
-
-2) Restart Docker.
-
-3) Clone the [d4m-nfs](https://github.com/IFSight/d4m-nfs) repository to your `home` directory.
-
-```bash
-git clone https://github.com/IFSight/d4m-nfs ~/d4m-nfs
-```
-
-4) Create (or edit) the file `~/d4m-nfs/etc/d4m-nfs-mounts.txt`, and write the follwing configuration in it:
-
-```txt
-/Users:/Users
-```
-
-5) Create (or edit) the file `/etc/exports`, make sure it exists and is empty. (There may be collisions if you come from Vagrant or if you already executed the `d4m-nfs.sh` script before).
-
-
-6) Run the `d4m-nfs.sh` script (might need Sudo):
-
-```bash
-~/d4m-nfs/d4m-nfs.sh
-```
-
-That's it! Run your containers.. Example:
-
-```bash
-docker-compose up ...
-```
-
-*Note: If you faced any errors, try restarting Docker, and make sure you have no spaces in the `d4m-nfs-mounts.txt` file, and your `/etc/exports` file is clear.*
-
+> 译者注：详细解决方法请参考[官方英文文档](http://laradock.io/documentation/#improve-speed-on-macos),该部分文档未做翻译。
 
 
 ## 常见问题
 
-*Here's a list of the common problems you might face, and the possible solutions.*
+*以下列出了您可能遇到的常见问题以及可能的解决方案*
 
 
-### I see a blank (white) page instead of the Laravel 'Welcome' page!
+### 看到一个空白页面，而不是Laravel的`欢迎`页面
 
-Run the following command from the Laravel root directory:
-
+从Laravel根目录运行以下命令：
 ```bash
 sudo chmod -R 777 storage bootstrap/cache
 ```
 
 
-### I see "Welcome to nginx" instead of the Laravel App!
+### 看到"Welcome to nginx"而不是Laravel应用程序
 
-Use `http://127.0.0.1` instead of `http://localhost` in your browser.
-
-
-
-### I see an error message containing `address already in use` or `port is already allocated`
-
-Make sure the ports for the services that you are trying to run (22, 80, 443, 3306, etc.) are not being used already by other programs on the host, such as a built in `apache`/`httpd` service or other development tools you have installed.
+在浏览器中使用`http://127.0.0.1`代替`http://localhost`
 
 
 
-### I get NGINX error 404 Not Found on Windows.
+### 看到一条错误消息包含`address already in use` 或者 `port is already allocated`
 
-1. Go to docker Settings on your Windows machine.
-2. Click on the `Shared Drives` tab and check the drive that contains your project files.
-3. Enter your windows username and password.
-4. Go to the `reset` tab and click restart docker.
+确保您尝试运行的服务的端口（22,80,443,3306等）未被主机上的其他程序使用，例如内置`apache`/`httpd`服务或其他开发工具。
 
 
 
-### The time in my services does not match the current time
+### 在Windows上收到Nginx错误404 Not Found
 
-1. Make sure you've [changed the timezone](#Change-the-timezone).
-2. Stop and rebuild the containers (`docker-compose up -d --build <services>`)
+1. 转到Windows机器上的docker设置
+2. 点击`Shared Drives`选项卡并检查包含项目文件的驱动器
+3. 输入你的Windows用户名和密码
+4. 进入`reset`选项卡，点击重新启动Docker
 
 
 
-### I get MySQL connection refused
+### 我的服服务中的时间和当前时间不符
 
-This error sometimes happens because your Laravel application isn't running on the container localhost IP (Which is 127.0.0.1). Steps to fix it:
+1. 确保你已经[修改时区时区](#修改时区)
+2. 停止并重新构建容器(`docker-compose up -d --build <services>`)
 
-* Option A
-  1. Check your running Laravel application IP by dumping `Request::ip()` variable using `dd(Request::ip())` anywhere on your application. The result is the IP of your Laravel container.
-  2. Change the `DB_HOST` variable on env with the IP that you received from previous step.
-* Option B
-   1. Change the `DB_HOST` value to the same name as the MySQL docker container. The Laradock docker-compose file currently has this as `mysql`
+
+### Mysql拒绝连接
+
+因为你的Laravel应用并未运行在容器的本机IP(127.0.0.1)上，有时会发生这个问题，可以通过以下步骤来解决：
+
+- 选项A
+    1. 通过在你应用程序中的任意位置die dump`Request::ip()`来检查正在运行的Laravel应用的IP，显示的结果是你的Laravel容器的IP。
+    2. 使用上一步你获得的IP更改`env`上的`DB_HOST`的变量。
+- 选项B
+    1. 将`DB_HOST`的值修改为Mysql容器的名字，当前Laradock docker-compose的名称是`mysql`
 
 ### I get stuck when building nginx on `fetch http://mirrors.aliyun.com/alpine/v3.5/main/x86_64/APKINDEX.tar.gz`
 
