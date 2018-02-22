@@ -31,6 +31,7 @@ gitbook serve
 ## 向参与翻译的同学致谢
 
 @linganmin
+@lhp9916
 
 
 
