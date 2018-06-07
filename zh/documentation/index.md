@@ -768,7 +768,7 @@ ports:
 
 默认的mysql用户的用户名和密码是root和root
 1. 进入mysql容器`docker-compose exec mysql bash`
-2. 使用root进入mysql`mysql -uroot -proot`，使用费root用户进入mysql`mysql -uhomestead -psecret`
+2. 使用root进入mysql`mysql -uroot -proot`，使用非root用户进入mysql`mysql -uhomestead -psecret`
 3. 查看所有用户`SELECT User FROM mysql.user;`
 4. 运行一些命令`show databases`, `show tables`, `select * from.....`.
 
