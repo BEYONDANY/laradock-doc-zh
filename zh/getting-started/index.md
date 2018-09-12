@@ -107,7 +107,7 @@ git clone https://github.com/laradock/laradock.git
 
 你可以根据需要重命名配置文件、项目文件夹和域名，只要确保`root`在配置文件中指向正确的文件夹名称即可。
 
-##### 4.在**hosts**文件夹中增加域名
+##### 4.在**hosts**文件中增加域名
 
 ```
 127.0.0.1  project-1.test

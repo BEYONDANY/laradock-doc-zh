@@ -33,6 +33,3 @@ gitbook serve
 @linganmin
 @lhp9916
 
-
-
-> 文档gitbook地址：https://www.gitbook.com/book/linganmin/laradock/details
