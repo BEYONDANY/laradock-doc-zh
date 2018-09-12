@@ -524,7 +524,7 @@ ports:
     # use with mariadb
     docker-compose up -d mariadb phpmyadmin
     ```
-    *注意: 要使用MariaDB, 打开 `.env`并设置`PMA_DB_ENGINE=mysql`为 `PMA_DB_ENGINE=mariadb`*
+    *注意: 在搭配 `MariaDB` 使用的时候，请修改 `.env`文件，并设置`PMA_DB_ENGINE=mysql`为 `PMA_DB_ENGINE=mariadb`*
 2. 打开浏览器并通过端口**8080**访问本地主机：`http://localhost:8080`
 
 
