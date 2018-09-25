@@ -299,7 +299,7 @@ PHP-CLI安装在Workspace容器中,要更改PHP-CLI版本，您需要编辑`work
 
 建议为生产环境创建一个自定义的`docker-compose.yml`文件，因此Laradock附带的`production-docker-compose.yml`文件应当包含您计划在生产中运行的容器(使用示例： `docker-compose -f production-docker-compose.yml up -d nginx mysql redis ...`).
 
-注意: 数据库(MySQL/MariaDB/...) 端口不应该在生产环境中转发, 口不应该在生产中转发，因为Docker会自动发布主机上的端口，这是非常不安全的，除非特别告知不要。所以一定要删除这些行：
+注意：数据库( MySQL/MariaDB/...) 端口不应该在生产环境中转发，这是非常危险的，除非有特殊告知需要在生产环境中转发端口，因为 Docker 容器会自动映射到宿主机的端口上。所以一般情况下一定要删除这些行：
 ```
 ports:
     - "3306:3306"
