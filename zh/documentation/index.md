@@ -781,6 +781,12 @@ Create `createdb.sql` from `mysql/docker-entrypoint-initdb.d/createdb.sql.exampl
 CREATE DATABASE IF NOT EXISTS `your_db_1` COLLATE 'utf8_general_ci' ;
 GRANT ALL ON `your_db_1`.* TO 'mysql_user'@'%' ;
 ```
+注意: 该数据库创建脚本，只有在 $DATA_PATH_HOST 对应的目录下不存在 mysql 文件夹的前提下，才会随着 mysql 容器的启动而自动运行。反之，如果 $DATA_PATH_HOST 对应的目录下已经存在了 mysql 文件夹，即：$DATA_PATH_HOST/mysql，表示容器已经启动了，在宿主机上生成了容器数据库的挂载。这时想创建额外的数据库，但是此时你又不想删除（要自动运行的前提就必须先删除挂载）已经存在的这个 mysql 挂载，那么，此时你就可以手动执行以下的命令：
+```sql
+docker-compose exec mysql bash
+mysql -u root -p < /docker-entrypoint-initdb.d/createdb.sql
+```
+再输入密码，刷新数据库连接工具，或者关掉重连，就可以看到新建的数据库。
 
 
 ## 更改MySQL端口
