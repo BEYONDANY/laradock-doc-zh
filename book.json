@@ -3,7 +3,7 @@
   "description": "这是laradock文档的中文版",
   "language": "zh-hans",
   "plugins": ["devops", "donate", "sitemap-general", "splitter", "-lunr", "-search", "search-plus",
-    "-highlight", "advanced-emoji", "github", "-sharing", "sharing-plus", "tbfed-pagefooter", "expandable-chapters-small", "disqus"
+    "-highlight", "github", "-sharing", "sharing-plus", "tbfed-pagefooter", "expandable-chapters-small", "disqus"
   ],
   "pluginsConfig": {
     "disqus": {
